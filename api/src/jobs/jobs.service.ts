@@ -9,6 +9,15 @@ export class JobsService {
     private jobModel: Model<Job>,
   ) {}
 
+  async getJobCount(): Promise<Number> {
+    return this.jobModel
+      .countDocuments({
+        expiredAt: null,
+      })
+      .exec();
+  }
+
+  // not using at the moment
   async findAll(): Promise<Job[]> {
     return this.jobModel
       .find(
@@ -32,9 +41,13 @@ export class JobsService {
       .exec();
   }
 
-  async findJobPage(page: number): Promise<Job[]> {
-    const jobsToSkip = (page - 1) * 10;
+  async getSortedJobsByPage(page: number, location: string) {
+    return 'whompwhomp';
+  }
 
+  // default sort, by page
+  async findJobsByPage(page: number): Promise<Job[]> {
+    const jobsToSkip = (page - 1) * 10;
     return this.jobModel
       .find(
         {
@@ -54,16 +67,9 @@ export class JobsService {
           title_raw: 1,
         },
       )
+      .sort({ posted: 'desc' })
       .skip(jobsToSkip)
       .limit(10)
-      .exec();
-  }
-
-  async findJobCount(): Promise<Number> {
-    return this.jobModel
-      .countDocuments({
-        expiredAt: null,
-      })
       .exec();
   }
 }

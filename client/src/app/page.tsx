@@ -7,9 +7,12 @@ import { Job } from './interfaces/Job';
 // import styles from './page.module.css';
 
 export default function Home() {
-  const [count, setCount] = useState<Number>(0);
+  const [count, setCount] = useState<number>(0);
   const [isLoading, setLoading] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [location, setLocation] = useState<GeolocationPosition | undefined>(
+    undefined
+  );
 
   // const sortData = (data: Job[] | undefined) => {
   //   data?.sort((a, b) => {
@@ -20,9 +23,18 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (response) => {
+        console.log('success', response);
+        setLocation(response);
+      },
+      (err) => {
+        console.log('Error:', err);
+      }
+    );
     fetch('http://localhost:8000/jobs/count')
       .then((res) => res.json())
-      .then((data: Number) => {
+      .then((data: number) => {
         // sortData(data);
         setCount(data);
         setLoading(false);

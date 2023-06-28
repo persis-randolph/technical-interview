@@ -1,9 +1,14 @@
 import { Document } from 'mongoose';
 
+type Coordinates = {
+  type: 'Point';
+  coordinates: [number, number];
+};
+
 type Location = {
   lat: number;
   lon: number;
-  coordinates: { type: 'Point'; coordinates: [number, number] };
+  coordinates: Coordinates;
 };
 
 export interface Job extends Document {

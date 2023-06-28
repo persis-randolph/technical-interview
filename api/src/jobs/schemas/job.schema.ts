@@ -4,13 +4,15 @@ const SkillSchema = new mongoose.Schema({
   value: String,
 });
 
+const CoordinatesSchema = new mongoose.Schema({
+  type: String,
+  coordinates: [Number, Number],
+});
+
 const LocationSchema = new mongoose.Schema({
   lat: Number,
   lon: Number,
-  coordinates: {
-    type: String,
-    coordinates: [Number, Number],
-  },
+  coordinates: CoordinatesSchema,
 });
 
 export const JobSchema = new mongoose.Schema({
@@ -28,5 +30,3 @@ export const JobSchema = new mongoose.Schema({
   title_name: String,
   title_raw: String,
 });
-
-// TODO: Add skills_name
