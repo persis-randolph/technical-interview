@@ -5,7 +5,7 @@ import AllResults from './components/allResults';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [count, setCount] = useState(0);
+  const [resultCount, setResultCount] = useState(0);
   const [isLoading, setLoading] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lat, setLat] = useState<number | undefined>(undefined);
@@ -16,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
 
+    // TODO: Use geolocation
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -31,7 +32,7 @@ export default function Home() {
     fetch('http://localhost:8000/jobs/count')
       .then((res) => res.json())
       .then((data: number) => {
-        setCount(data);
+        setResultCount(data);
         setLoading(false);
       });
   }, []);
@@ -98,6 +99,7 @@ export default function Home() {
             <div className="px-4">Why SkillUp?</div>
           </a>
           {/* MENU */}
+          {/* TODO: implement click-off to close if time */}
           <div
             className="px-4 flex items-center relative inline-block z-1 cursor-pointer"
             onClick={toggleMenu}
@@ -164,7 +166,7 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <div id="result-summary-and-search text-left">
             <span className="font-semibold">
-              Showing {count.toString()} results.
+              Showing {resultCount.toString()} results.
             </span>
             <span className="underline underline-offset-4 decoration-dashed decoration-1 ml-2">
               How did we choose these open jobs?
@@ -173,7 +175,7 @@ export default function Home() {
           {/* TODO: implement search */}
           <form>
             <input
-              onSubmit={onFormSubmit}
+              onSubmit={() => onFormSubmit}
               name="keywordSearch"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
@@ -183,7 +185,7 @@ export default function Home() {
             ></input>
           </form>
         </div>
-        <AllResults resultCount={count} />
+        <AllResults resultCount={resultCount} />
       </main>
     </main>
   );

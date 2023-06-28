@@ -23,24 +23,13 @@ const AllResults: React.FC<AllResultsProps> = ({ resultCount }) => {
         setLoading(false);
         setNumOfPages(Math.ceil(resultCount / 10));
       });
-    const newPage = currentPage + 1;
     const numOfPages = Math.ceil(resultCount / 10);
-    if (newPage > 1 && newPage < resultCount) {
-      setShowLeftToggle(true);
-      setShowRightToggle(true);
-    } else if (newPage !== 1) {
-      setShowLeftToggle(true);
-      setShowRightToggle(false);
-    } else if (newPage > 0 && newPage < resultCount) {
-      setShowLeftToggle(false);
-      setShowRightToggle(true);
-    }
+    numOfPages > 1 && setShowRightToggle(true);
   }, []);
 
   if (!jobs) {
     return <div>No results found.</div>;
   }
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -54,8 +43,6 @@ const AllResults: React.FC<AllResultsProps> = ({ resultCount }) => {
       .then((data: Job[]) => {
         setJobs(data);
         setLoading(false);
-        // would need if we were filtering only
-        // setNumOfPages(Math.ceil(resultCount / 10));
       });
     if (newPageNum > 1 && newPageNum < numOfPages) {
       setShowLeftToggle(true);

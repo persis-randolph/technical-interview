@@ -8,7 +8,7 @@ interface SingleResultProps {
 }
 
 const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
-  const riasecArray = job.riasec.map((value: string, i: number) => {
+  const riasecDisplay = job.riasec.map((value: string, i: number) => {
     return (
       <div
         key={i}
@@ -19,16 +19,13 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
     );
   });
 
-  const skillsArray = job.skills_name.map((skill, i) => {
-    if (job.skills_name.length - 1 === i) {
-      return <span key={i}>{skill.value}</span>;
-    } else {
-      return <span key={i}>{skill.value},&nbsp;</span>;
-    }
+  const skillsDisplay = job.skills_name.map((skill, i) => {
+    return job.skills_name.length - 1 === i
+      ? `${skill.value}`
+      : `${skill.value}, `;
   });
 
-  // TODO: add commas
-  const salaryDisplay = `$${job.min_salary}/year`;
+  const salaryDisplay = `$${job.min_salary.toLocaleString()}/year`;
 
   return (
     // WHOLE RESULT
@@ -63,13 +60,6 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
                   height={12}
                   className="mr-1"
                 />
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 384 512"
-                  className="pr-2 h-6"
-                >
-                  <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                </svg> */}
                 {job.city_name}
               </div>
             </div>
@@ -99,12 +89,12 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
         </div>
       </div>
       {/* SOCIAL ETC SECTION */}
-      <div className="flex px-6 mt-2 mb-3">{riasecArray}</div>
+      <div className="flex px-6 mt-2 mb-3">{riasecDisplay}</div>
       {/* SKILLS SECTION */}
       <div className="border-t-[1px]">
         <div className="flex flex-col mt-2 text-start pt-2 pr-6 pl-6 pb-6">
           <div className="font-bold text-sm mb-1">SKILLS</div>
-          <div className="flex flex-wrap">{skillsArray}</div>
+          <div className="flex flex-wrap">{skillsDisplay}</div>
         </div>
       </div>
     </div>
