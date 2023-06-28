@@ -3,39 +3,34 @@
 import Image from 'next/image';
 import AllResults from './components/allResults';
 import { useState, useEffect } from 'react';
-import { Job } from './interfaces/Job';
-// import styles from './page.module.css';
 
 export default function Home() {
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState(0);
   const [isLoading, setLoading] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [location, setLocation] = useState<GeolocationPosition | undefined>(
-    undefined
-  );
-
-  // const sortData = (data: Job[] | undefined) => {
-  //   data?.sort((a, b) => {
-  //     return +new Date(b.posted) - +new Date(a.posted);
-  //   });
-  //   return data;
-  // };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [lat, setLat] = useState<number | undefined>(undefined);
+  const [lon, setLon] = useState<number | undefined>(undefined);
+  const [userInput, setUserInput] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (response) => {
-        console.log('success', response);
-        setLocation(response);
-      },
-      (err) => {
-        console.log('Error:', err);
-      }
-    );
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLat(position.coords.latitude);
+          setLon(position.coords.longitude);
+        },
+        (err) => {
+          console.log('Error:', err);
+        }
+      );
+    }
+
     fetch('http://localhost:8000/jobs/count')
       .then((res) => res.json())
       .then((data: number) => {
-        // sortData(data);
         setCount(data);
         setLoading(false);
       });
@@ -52,10 +47,23 @@ export default function Home() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      setSubmitting(true);
+      // TODO: send fetch request here
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setSubmitting(false);
+      setUserInput('');
+    }
+  };
+
   const menu = (
     <div
       id="menu-options"
-      className="bg-white absolute top-[54px] left-1/2 -ml-[40px] z-2 w-28 text-center"
+      className="bg-white absolute top-[54px] left-1/2 -ml-[40px] z-2 w-28 text-center cursor-pointer"
     >
       <a href="#">
         <div className="py-2">Option 1</div>
@@ -91,7 +99,7 @@ export default function Home() {
           </a>
           {/* MENU */}
           <div
-            className="px-4 flex items-center relative inline-block z-1"
+            className="px-4 flex items-center relative inline-block z-1 cursor-pointer"
             onClick={toggleMenu}
           >
             Menu
@@ -114,6 +122,7 @@ export default function Home() {
               className="mr-2"
             />
             {/* TODO: make dynamic */}
+            {/* {lat && lon ? `${lat}, ${lon}` : 'New Orleans'} */}
             New Orleans
           </div>
           <a href="#">
@@ -162,7 +171,17 @@ export default function Home() {
             </span>
           </div>
           {/* TODO: implement search */}
-          <input className="border-[1px] h-8 p-4" placeholder="Keyword"></input>
+          <form>
+            <input
+              onSubmit={onFormSubmit}
+              name="keywordSearch"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              className="border-[1px] h-8 p-4"
+              placeholder="Keyword"
+              required
+            ></input>
+          </form>
         </div>
         <AllResults resultCount={count} />
       </main>

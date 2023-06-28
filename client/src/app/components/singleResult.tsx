@@ -27,6 +27,9 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
     }
   });
 
+  // TODO: add commas
+  const salaryDisplay = `$${job.min_salary}/year`;
+
   return (
     // WHOLE RESULT
     <div key={i} className="border-2 rounded-md bg-white mt-4">
@@ -55,7 +58,7 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
               <div className="flex">
                 <Image
                   src="/location-dot-solid.svg"
-                  alt="heart icon"
+                  alt="location icon"
                   width={12}
                   height={12}
                   className="mr-1"
@@ -75,7 +78,7 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
         {/* HEAD RIGHT */}
         <div className="w-1/5 text-right">
           {/* HEART */}
-          <div className="flex justify-end">
+          <div className="flex justify-end cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
@@ -90,6 +93,9 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
             isEarnAndLearn={job.is_earn_and_learn}
             isGateway={job.is_gateway_job}
           />
+          <div className="text-purple-300 text-2xl font-bold mt-2">
+            {salaryDisplay}
+          </div>
         </div>
       </div>
       {/* SOCIAL ETC SECTION */}
@@ -98,7 +104,7 @@ const SingleResult: React.FC<SingleResultProps> = ({ job, i }) => {
       <div className="border-t-[1px]">
         <div className="flex flex-col mt-2 text-start pt-2 pr-6 pl-6 pb-6">
           <div className="font-bold text-sm mb-1">SKILLS</div>
-          <div>{skillsArray}</div>
+          <div className="flex flex-wrap">{skillsArray}</div>
         </div>
       </div>
     </div>

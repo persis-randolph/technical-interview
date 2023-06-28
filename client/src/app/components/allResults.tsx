@@ -49,7 +49,7 @@ const AllResults: React.FC<AllResultsProps> = ({ resultCount }) => {
     const newPageNum = newPageIndex + 1;
     setPage(newPageIndex);
     setLoading(true);
-    fetch(`http://localhost:8000/jobs/${newPageIndex}`)
+    fetch(`http://localhost:8000/jobs/${newPageNum}`)
       .then((res) => res.json())
       .then((data: Job[]) => {
         setJobs(data);
@@ -69,13 +69,13 @@ const AllResults: React.FC<AllResultsProps> = ({ resultCount }) => {
     }
   };
 
-  const leftButton = <div className="mr-2 text-2xl cursor">&lt;</div>;
-  const rightButton = <div className="ml-2 text-2xl cursor">&gt;</div>;
+  const leftButton = <div className="mr-2 mb-1 text-2xl cursor">&lt;</div>;
+  const rightButton = <div className="ml-2 mb-1 text-2xl cursor">&gt;</div>;
 
   if (jobs) {
-    const singleResults = jobs.map((el: Job, i: number) => {
+    const singleResults = jobs?.map((el: Job, i: number) => {
       return <SingleResult key={i} job={el} i={i} />;
-    });
+    }) || <div>No results.</div>;
 
     return (
       <div>
@@ -89,7 +89,7 @@ const AllResults: React.FC<AllResultsProps> = ({ resultCount }) => {
             >
               {showLeftToggle ? leftButton : ''}
             </div>
-            {currentPage + 1}
+            Page {currentPage + 1}
             <div
               onClick={() => updatePage(currentPage + 1)}
               className="cursor-pointer"

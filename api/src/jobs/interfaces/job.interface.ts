@@ -21,6 +21,8 @@ export interface Job extends Document {
   readonly company_name: String;
   readonly is_earn_and_learn: Boolean;
   readonly location: Location;
+  readonly max_salary: Number;
+  readonly min_salary: Number;
   readonly posted: Date;
   readonly skills_name: { value: string }[];
   readonly title_name: String;

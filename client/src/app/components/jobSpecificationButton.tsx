@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 interface JSBProps {
-  isEarnAndLearn: Boolean;
-  isGateway: Boolean;
+  isEarnAndLearn: boolean;
+  isGateway: boolean;
 }
 
 const JobSpecificationButton: React.FC<JSBProps> = ({
@@ -33,7 +33,7 @@ const JobSpecificationButton: React.FC<JSBProps> = ({
 
   if (isGateway || isEarnAndLearn) {
     return (
-      <div className="group bg-purple-300 rounded-md h-9 w-36 mt-2 relative inline-block z-1">
+      <div className="group bg-purple-300 rounded-md h-9 w-36 mt-2 relative inline-block z-1 cursor-pointer">
         <div className="flex justify-center">
           <Image
             src={iconPath}
