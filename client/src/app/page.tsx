@@ -1,95 +1,159 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+
+import Image from 'next/image';
+import AllResults from './components/allResults';
+import { useState, useEffect } from 'react';
+import { Job } from './interfaces/Job';
+// import styles from './page.module.css';
 
 export default function Home() {
+  const [count, setCount] = useState<Number>(0);
+  const [isLoading, setLoading] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  // const sortData = (data: Job[] | undefined) => {
+  //   data?.sort((a, b) => {
+  //     return +new Date(b.posted) - +new Date(a.posted);
+  //   });
+  //   return data;
+  // };
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('http://localhost:8000/jobs/count')
+      .then((res) => res.json())
+      .then((data: Number) => {
+        // sortData(data);
+        setCount(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (isLoading)
+    return (
+      <div className="h-full min-h-screen bg-stone-100 text-center">
+        Loading...
+      </div>
+    );
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const menu = (
+    <div
+      id="menu-options"
+      className="bg-white absolute top-[54px] left-1/2 -ml-[40px] z-2 w-28 text-center"
+    >
+      <a href="#">
+        <div className="py-2">Option 1</div>
+      </a>
+      <hr></hr>
+      <a href="#">
+        <div className="py-2">Option 2</div>
+      </a>
+      <hr></hr>
+      <a href="#">
+        <div className="py-2">Option 3</div>
+      </a>
+    </div>
+  );
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
+    <main className="h-full min-h-screen bg-stone-100">
+      <nav className="font-bold bg-white flex justify-between items-center h-20 py-6 px-12 shadow-md">
+        <div id="logo">
+          <a href="#">
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
+              src="/logo_skill_up.svg"
+              alt="SkillUp Logo"
+              width={200}
+              height={45}
               priority
             />
           </a>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
+        <div id="menu-items" className="flex">
+          <a href="#">
+            <div className="px-4">Why SkillUp?</div>
+          </a>
+          {/* MENU */}
+          <div
+            className="px-4 flex items-center relative inline-block z-1"
+            onClick={toggleMenu}
+          >
+            Menu
+            <Image
+              src="/icon_angle_down_light.svg"
+              alt="heart icon"
+              width={12}
+              height={12}
+              className="ml-2"
+            />
+            {isMenuOpen ? menu : ''}
+          </div>
+          <div></div>
+          <div className="px-4 flex items-center">
+            <Image
+              src="/location-dot-thin.svg"
+              alt="heart icon"
+              width={18}
+              height={18}
+              className="mr-2"
+            />
+            {/* TODO: make dynamic */}
+            New Orleans
+          </div>
+          <a href="#">
+            <div className="px-4 flex items-center">
+              {/* TODO: If time, change to look more like real icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="pr-2 h-4"
+              >
+                {/* <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --> */}
+                <path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z" />
+              </svg>
+              My Path
+            </div>
+          </a>
+          <a href="#">
+            <div className="px-4 flex items-center">
+              <Image
+                src="/icon_heart_filled.svg"
+                alt="heart icon"
+                width={18}
+                height={18}
+                className="mr-2"
+              />
+              Persis
+            </div>
+          </a>
+        </div>
+      </nav>
+      <main className="py-16 px-44">
+        <div id="main-statement" className="mb-2">
+          <h2 className="text-2xl font-bold text-sky-950">
+            We locate promising jobs that provide educational perks. Keep coming
+            back for new additions!
           </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        </div>
+        {/* RESULTS AND SEARCH */}
+        <div className="flex justify-between items-center">
+          <div id="result-summary-and-search text-left">
+            <span className="font-semibold">
+              Showing {count.toString()} results.
+            </span>
+            <span className="underline underline-offset-4 decoration-dashed decoration-1 ml-2">
+              How did we choose these open jobs?
+            </span>
+          </div>
+          {/* TODO: implement search */}
+          <input className="border-[1px] h-8 p-4" placeholder="Keyword"></input>
+        </div>
+        <AllResults resultCount={count} />
+      </main>
     </main>
-  )
+  );
 }

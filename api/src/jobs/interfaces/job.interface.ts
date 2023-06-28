@@ -1,0 +1,23 @@
+import { Document } from 'mongoose';
+
+type Location = {
+  lat: number;
+  lon: number;
+  coordinates: { type: 'Point'; coordinates: [number, number] };
+};
+
+export interface Job extends Document {
+  readonly _id: String;
+  readonly body: String;
+  readonly expiredAt: Date | null;
+  readonly is_gateway_job: Boolean;
+  readonly riasec: string[];
+  readonly city_name: String;
+  readonly company_name: String;
+  readonly is_earn_and_learn: Boolean;
+  readonly location: Location;
+  readonly posted: Date;
+  readonly skills_name: { value: string }[];
+  readonly title_name: String;
+  readonly title_raw: String;
+}
